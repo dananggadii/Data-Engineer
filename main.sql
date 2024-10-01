@@ -133,3 +133,20 @@ FROM name_table
 GROUP BY field_name
 HAVING COUNT(field_name) > number_filtered;
 
+-- Inner JOIN
+SELECT name_table.field_name, field_name, field_name -- Noted : table.field_name digunakan ketika field_name terdapat dalam 2 table
+FROM name_table -- table wadah 
+INNER JOIN name_table -- table yang ingin di join
+ON name_table.field_name = name_table.field_name; -- field harus sama antara kedua table untuk dijadikan korelasi
+
+-- Inner JOIN with alias table 
+SELECT as_name_table.field_name, field_name, field_name -- Ubah nama table dengan alias yang sudah di deklarasikan
+FROM name_table AS name_alias -- table wadah
+INNER JOIN name_table AS name_alias -- table yang ingin di join
+ON as_name_table.field_name = as_name_table.field_name; -- field harus sama antara kedua table untuk dijadikan korelasi
+
+-- INNER JOIN with using function
+SELECT as_name_table.field_name, field_name 
+FROM name_table AS name_alias 
+INNER JOIN name_table AS name_alias
+USING(field_name); -- field name = field yang sama dari 2 table yang menjadi pusat INNER JOIN
