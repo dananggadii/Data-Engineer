@@ -150,3 +150,22 @@ SELECT as_name_table.field_name, field_name
 FROM name_table AS name_alias 
 INNER JOIN name_table AS name_alias
 USING(field_name); -- field name = field yang sama dari 2 table yang menjadi pusat INNER JOIN
+
+-- Relations beetwen table 
+-- Select country and language name (aliased)
+SELECT c.name AS country, l.name AS language
+-- From countries (aliased)
+FROM countries AS c
+-- Join to languages (aliased)
+INNER JOIN languages AS l
+-- Use code as the joining field with the USING keyword
+USING(code)
+-- Filter for the Bhojpuri language
+WHERE l.name = 'Bhojpuri';
+
+-- Multiple Join 
+SELECT * 
+FROM left_table AS l 
+INNER JOIN right_table AS r 
+ON left_table_id = right_table_id
+  AND left_table_date = right_table_date
