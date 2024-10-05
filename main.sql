@@ -152,15 +152,10 @@ INNER JOIN name_table AS name_alias
 USING(field_name); -- field name = field yang sama dari 2 table yang menjadi pusat INNER JOIN
 
 -- Relations beetwen table 
--- Select country and language name (aliased)
 SELECT c.name AS country, l.name AS language
--- From countries (aliased)
 FROM countries AS c
--- Join to languages (aliased)
 INNER JOIN languages AS l
--- Use code as the joining field with the USING keyword
 USING(code)
--- Filter for the Bhojpuri language
 WHERE l.name = 'Bhojpuri';
 
 -- Multiple Join 
@@ -169,3 +164,63 @@ FROM left_table AS l
 INNER JOIN right_table AS r 
 ON left_table_id = right_table_id
   AND left_table_date = right_table_date
+
+-- Left Join 
+SELECT 
+	c1.name AS city, 
+    code, 
+    c2.name AS country,
+    region, 
+    city_proper_pop
+FROM cities AS c1
+LEFT JOIN countries AS c2
+ON c1.country_code = c2.code
+ORDER BY code DESC;
+
+-- Right Join
+SELECT countries.name AS country, languages.name AS language, percent
+FROM languages
+RIGHT JOIN countries
+USING(code)
+ORDER BY language;
+
+-- FULL JOIN
+SELECT 
+	c1.name AS country, 
+    region, 
+    l.name AS language,
+	basic_unit, 
+    frac_unit
+FROM countries as c1 
+FULL JOIN languages AS l 
+ON c1.code = l.code
+FULL JOIN currencies AS c2
+ON c1.code = c2.code
+WHERE region LIKE 'M%esia';
+
+-- CROSS JOIN
+SELECT c.name AS country, l.name AS language
+FROM countries AS c        
+CROSS JOIN languages AS l
+WHERE c.code in ('PAK','IND')
+	AND l.code in ('PAK','IND');
+
+-- Self JOIN
+SELECT 
+	p1.country_code, 
+    p1.size AS size2010, 
+    p2.size AS size2015
+FROM populations AS p1
+INNER JOIN populations AS p2
+ON p1.country_code = p2.country_code
+WHERE p1.year = 2010
+    AND p1.year = p2.year - 5;
+
+-- NOTED : perbedaan INNER, LEFT dan RIGHT JOIN
+-- Inner =  Mengembalikan hanya bagian yang beririsan (kecocokan di kedua tabel).
+-- LEFT =  Mengembalikan seluruh baris dari tabel kiri dan kecocokan dari tabel kanan.
+-- RIGHT = Mengembalikan seluruh baris dari tabel kanan dan kecocokan dari tabel kiri.
+-- FULL = Mengembalikan seluruh baris dari left dan right table.
+-- CROSS = Mengembalikan seluruh baris dari table dengan berbagai kondisi.
+
+
