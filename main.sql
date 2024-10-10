@@ -222,5 +222,128 @@ WHERE p1.year = 2010
 -- RIGHT = Mengembalikan seluruh baris dari tabel kanan dan kecocokan dari tabel kiri.
 -- FULL = Mengembalikan seluruh baris dari left dan right table.
 -- CROSS = Mengembalikan seluruh baris dari table dengan berbagai kondisi.
+-- SELF = Mengembalikan seluruh baris dari table untuk dirinya sendiri.
 
 
+-- NOTED UNION and UNION ALL = mengembalikan nilai dari kedua table, UNION ALL dia akan mengembalikan nilai walaupun duplikat
+SELECT * 
+FROM left_table
+UNION 
+SELECT * 
+FROM right_table;
+
+SELECT * 
+FROM left_table
+UNION ALL
+SELECT * 
+FROM right_table;
+
+SELECT code, year
+FROM economies
+UNION ALL
+SELECT country_code, year
+FROM populations
+ORDER BY code, year;
+
+-- INTERSECT = mengambil 2 table sebagai input, dan hanya mengembalikan nilai yang ada di kedua table 
+SELECT id, val -- must same with field_name right_table 
+FROM left_table
+INTERSECT
+SELECT id, val -- must same with field_name right_table
+FROM right_table;
+
+-- EXCEPT = mengambil value dari table kiri yang tidak ada di table kanan
+SELECT * 
+FROM left_table
+EXCEPT 
+SELECT *
+FROM right_table;
+
+SELECT name -- Output = return name left_table yang tidak sama dengan right_table
+FROM cities
+EXCEPT 
+SELECT name
+FROM countries
+ORDER BY name;
+
+-- SEMI JOIN = Mengembalikan nilai table kiri dengan kondisi di table 2
+SELECT president, country, continent 
+FROM president 
+WHERE country IN
+  (
+    SELECT country 
+    FROM states
+    WHERE indep_year = 1800); 
+
+-- ANTI JOIN = Mengembalikan nilai table kiri yang tidak memiliki duplikat di table kanan
+SELECT DISTINCT name -- Output hanya menghasilkan bahasa yang berada di country 'middle east'
+FROM languages
+WHERE code IN
+    (SELECT code
+    FROM countries
+    WHERE region = 'Middle East')
+ORDER BY name;
+
+SELECT code, name
+FROM countries
+WHERE continent = 'Oceania'
+  AND code NOT IN
+    (SELECT code
+    FROM currencies);
+
+-- Subquery = Menampilkan hasil dengan kondisi pada table lain nya
+SELECT name, country_code, urbanarea_pop
+FROM cities
+WHERE name IN 
+    (
+        SELECT capital
+        FROM countries)
+ORDER BY urbanarea_pop DESC;
+
+-- Subquery in SELECT
+SELECT countries.name AS country,  
+  (SELECT COUNT(*) AS cities_num
+  FROM cities
+  WHERE cities.country_code = countries.code) AS cities_num
+FROM countries
+ORDER BY cities_num DESC, country
+LIMIT 9;
+
+-- Subquery in FROM
+SELECT DISTINCT monarch.continent, sub.most_recent 
+FROM monarch, 
+  (SELECT continent, MAX(indep_year) AS most_recent
+  FROM states 
+  GROUP BY continent) AS sub
+WHERE monarch.continent = sub.continent
+ORDER BY continent;
+
+SELECT local_name, sub.lang_num
+FROM countries,
+  (SELECT code, COUNT(*) AS lang_num
+    FROM languages
+    GROUP BY code) AS sub
+WHERE countries.code = sub.code
+ORDER BY lang_num DESC;
+
+-- Final JOIN Project
+SELECT 
+    name, 
+    country_code, 
+    city_proper_pop, 
+    metroarea_pop, 
+    (city_proper_pop / metroarea_pop) * 100 AS city_perc
+FROM 
+    cities
+WHERE 
+    name IN (
+        SELECT capital
+        FROM countries
+        WHERE 
+            continent = 'Europe' 
+            OR continent LIKE '%America'
+    )
+    AND metroarea_pop IS NOT NULL
+ORDER BY 
+    city_perc DESC
+LIMIT 10;
