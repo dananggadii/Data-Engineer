@@ -39,6 +39,10 @@ VALUES ('value_a', 'value_b');
 ALTER TABLE table_name
 RENAME COLUMN old_name TO new_name;
 
+-- DROP (remove) Column_name on table 
+ALTER TABLE table_name
+DROM COLUMN column_name;
+
 ----------------- Example -----------------------------
 
 -- Create a table for the professors entity type
@@ -55,5 +59,8 @@ ADD COLUMN university_shortname text;
 SELECT * 
 FROM professors;
 
-
+-- ORDER BY = Selected result by lastname 
+SELECT DISTINCT firstname, lastname, university_shortname
+FROM professors
+ORDER BY lastname;
 
