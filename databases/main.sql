@@ -41,7 +41,11 @@ RENAME COLUMN old_name TO new_name;
 
 -- DROP (remove) Column_name on table 
 ALTER TABLE table_name
-DROM COLUMN column_name;
+DROP COLUMN column_name;
+
+-- DROP (remove) table_name on databases 
+DROP TABLE table_name;
+
 
 ----------------- Example -----------------------------
 
@@ -64,3 +68,21 @@ SELECT DISTINCT firstname, lastname, university_shortname
 FROM professors
 ORDER BY lastname;
 
+-- Rename the organisation column
+ALTER TABLE affiliations
+RENAME COLUMN organisation TO organization;
+
+-- Delete the university_shortname column
+ALTER TABLE affiliations
+DROP COLUMN university_shortname;
+
+-- Insert unique professors into the new table
+INSERT INTO professors 
+SELECT DISTINCT firstname, lastname, university_shortname 
+FROM university_professors;
+
+SELECT * 
+FROM professors;
+
+-- Delete the university_professors table
+DROP TABLE university_professors;
