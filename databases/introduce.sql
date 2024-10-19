@@ -151,3 +151,12 @@ DROP NOT Null;
 ALTER TABLE universities
 ADD CONSTRAINT university_shortname_unq UNIQUE(university_shortname); -- create a new column with unique values from the university_shortname 
 
+------------------------------------------------------------------------------------------------------------------------------
+
+-- Rename the organization column to id
+ALTER TABLE organizations
+RENAME COLUMN organization TO id;
+
+-- Make id a primary key
+ALTER TABLE organizations
+ADD CONSTRAINT organization_pk PRIMARY KEY (id);
