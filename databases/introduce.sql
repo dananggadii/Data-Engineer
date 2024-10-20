@@ -208,6 +208,7 @@ SELECT * FROM cars;
 
 ------------------------------------------------------------------------------------------------------------------------------
 
+-- One to One relationship
 -- Foreign keys
 CREATE TABLE manufactures (
   name varchar(255) PRIMARY KEY
@@ -236,13 +237,13 @@ ADD CONSTRAINT professors_fkey FOREIGN KEY (university_id) REFERENCES universiti
 
 ------------------------------------------------------------------------------------------------------------------------------
 
--- Foreign Key Use Case
--- Select all professors working for universities in the city of Zurich
-SELECT professors.lastname, universities.id, universities.university_city
-FROM professors
-JOIN universities
-ON professors.university_id = universities.id
-WHERE universities.university_city = 'Zurich';
+-- One to many relationship
+-- Add relationship to many table
+CREATE TABLE affiliators (
+  professors_id integer REFERENCES professors(id),
+  organisation_id integer REFERENCES organisation(id),
+  function varchar(256)
+);
 
 ------------------------------------------------------------------------------------------------------------------------------
 
