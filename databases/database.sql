@@ -56,3 +56,19 @@ SELECT * FROM dim_author;
 
 ---------------------------------------------------------------------------------------------------------------
 
+-- Output each state and their total sales_amount
+SELECT ds.state, SUM(fs.sales_amount)
+FROM fact_booksales fs
+    -- Join to get book information
+    JOIN dim_book_star db ON fs.book_id = db.book_id
+    -- Join to get store information
+    JOIN dim_store_star ds ON fs.store_id = ds.store_id
+-- Get all books with the genre 'novel'
+WHERE  
+    db.genre = 'novel'
+-- Group results by state
+GROUP BY
+    ds.state;
+
+---------------------------------------------------------------------------------------------------------------
+
