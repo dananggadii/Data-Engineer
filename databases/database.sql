@@ -72,3 +72,19 @@ GROUP BY
 
 ---------------------------------------------------------------------------------------------------------------
 
+-- Output each state and their total sales_amount
+SELECT ds.state, SUM(fs.sales_amount)
+FROM fact_booksales fs
+    -- Joins for genre
+    JOIN dim_book_sf db ON fs.book_id = db.book_id
+    JOIN dim_genre_sf dg ON db.genre_id = dg.genre_id
+    -- Joins for state
+    JOIN dim_store_sf dsf ON fs.store_id = dsf.store_id
+    JOIN dim_city_sf dc ON dsf.city_id = dc.city_id
+    JOIN dim_state_sf ds ON dc.state_id = ds.state_id
+-- Get all books within the novel genre
+WHERE  
+    dg.genre = 'novel'
+-- Group the results by state
+GROUP BY
+    ds.state;
